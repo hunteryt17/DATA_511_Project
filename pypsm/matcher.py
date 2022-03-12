@@ -34,7 +34,7 @@ class Matcher:
     def compute_matched_data(self):
         
         print("Generating Logistic Regression Model...")
-        self.___create_logistic_regression()
+        self.__create_logistic_regression()
 
         print("Model Generated")
         self.__set_scores()
@@ -45,7 +45,7 @@ class Matcher:
         print("Matching Complete")
         return matched_data
 
-    def ___create_logistic_regression(self):
+    def __create_logistic_regression(self):
         model = LogisticRegression()
 
         # define search space

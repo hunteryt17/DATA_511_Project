@@ -1,6 +1,6 @@
 import pandas as pd
 
-from matcher import Matcher
+from pypsm import matcher as m
 
 def match(data, treatment_column, is_csv=False, output_csv=None):
     """
@@ -28,11 +28,11 @@ def match(data, treatment_column, is_csv=False, output_csv=None):
     if is_csv:
         data = pd.read_csv(data)
     
-    matcher = Matcher(data, treatment_column)
+    matcher = m.Matcher(data, treatment_column)
     matched_data = matcher.compute_matched_data()
 
     if output_csv is not None:
-        matched_data.to_csv(output_csv)
+        matched_data.to_csv(output_csv,index_label='index')
 
     return matched_data
 
