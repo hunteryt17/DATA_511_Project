@@ -8,7 +8,7 @@ Hunter Yobei Thompson
 
 ## Installation
 To install pypsm, simply clone this git repository.  
-`git clone https://github.com/hunteryt17/DATA_511_Project.git`
+`git clone https://github.com/hunteryt17/DATA_511_Project.git`  
 After cloning, navigate to the directory where the repo is located and use pip to install the package.  
 `pip install .`
 
