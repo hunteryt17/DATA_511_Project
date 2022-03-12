@@ -2,22 +2,21 @@ import warnings
 
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import RandomizedSearchCV
-from sklearn.metrics import accuracy_score, confusion_matrix,roc_curve, roc_auc_score, precision_score, recall_score, precision_recall_curve
-from sklearn.metrics import f1_score
 from scipy.stats import loguniform
 import pandas as pd
 
 warnings.filterwarnings("ignore")
 
+
 class Matcher:
     """
-    Creates matched dataset based on propensity score. 
+    Creates matched dataset based on propensity score.
 
     Class to create a matched dataset balanced for the control group to be the
-    same size as the treatment group based on the variable of interest. 
+    same size as the treatment group based on the variable of interest.
     ------
-    Inputs: 
-    - data = pandas dataframe or csv file (depending on is_csv param) 
+    Inputs:
+    - data = pandas dataframe or csv file (depending on is_csv param)
              with fully cleaned data (see demo or README)
     - treatment_column = string of column corresponding to treatment group,
                          values should be binary with 1 representing
@@ -32,7 +31,7 @@ class Matcher:
         self.predictors = predictors
 
     def compute_matched_data(self):
-        
+
         print("Generating Logistic Regression Model...")
         self.__create_logistic_regression()
 
@@ -55,8 +54,8 @@ class Matcher:
         params['penalty'] = ['l1', 'l2', 'elasticnet', 'none']
         params['C'] = loguniform(1e-5, 100)
 
-        search = RandomizedSearchCV(model, params, scoring="roc_auc",\
-             n_iter = 100, cv=10, random_state=1)
+        search = RandomizedSearchCV(model, params, scoring="roc_auc",
+                                    n_iter=100, cv=10, random_state=1)
 
         X = self.data[self.predictors]
         y = self.data[self.treatment_column]
@@ -68,28 +67,30 @@ class Matcher:
         self._final_model = final_model
 
     def __set_scores(self):
-        self.data['SCORE'] = [score[1] for score in \
-                    self._final_model.predict_proba(self.data[self.predictors])]
+        self.data['SCORE'] = [score[1] for score in
+                              self._final_model.predict_proba
+                              (self.data[self.predictors])]
 
     def __match(self):
-        treatment_scores = self.data[self.data[self.treatment_column] == 1][['SCORE']]
-        control_scores = self.data[self.data[self.treatment_column] == 0][['SCORE']]
-        result = []
+        treatment_scores = self.data[self.data[self.treatment_column]
+                                     == 1][['SCORE']]
+        control_scores = self.data[self.data[self.treatment_column]
+                                   == 0][['SCORE']]
         match_indices = []
 
         for i in range(len(treatment_scores)):
-            match_index = i
             score = treatment_scores.iloc[i]
-            temp_control = control_scores[~control_scores.index.isin(match_indices)]
+            temp_control = control_scores[~control_scores.index.isin(
+                                          match_indices)]
 
             match = abs(temp_control - score).sort_values(by='SCORE').index[0]
-            
+
             match_indices.append(match)
 
-        treatment_group =  self.data[self.data[self.treatment_column] == 1]
+        treatment_group = self.data[self.data[self.treatment_column] == 1]
         matched_control_group = self.data[self.data.index.isin(match_indices)]
 
-        matched_data = pd.concat([treatment_group, matched_control_group], axis=0)
+        matched_data = pd.concat([treatment_group, matched_control_group],
+                                 axis=0)
 
         return matched_data
-        

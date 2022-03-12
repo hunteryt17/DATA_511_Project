@@ -8,12 +8,13 @@ from pypsm import matcher as m
 from pypsm import match
 
 
-
 def log_reg_proba(df):
     return pd.concat([df['pre_score'], df['pre_score']], axis=1).to_numpy()
 
-test_dict1 = {'treat': [1, 1, 1, 0, 0, 0, 0, 0, 0, 0], \
-'pre_score': [0.98, 0.95, 0.97, 0.96, 0.94, 0.91, 0.04, 0.4, 0.3, 0.1]}
+
+test_dict1 = {'treat': [1, 1, 1, 0, 0, 0, 0, 0, 0, 0],
+              'pre_score': [0.98, 0.95, 0.97, 0.96, 0.94,
+                            0.91, 0.04, 0.4, 0.3, 0.1]}
 test_df1 = pd.DataFrame(data=test_dict1)
 
 model = LogisticRegression()
@@ -25,9 +26,9 @@ m_class._Matcher__create_logistic_regression = MagicMock(return_value=model)
 
 test_output = './test_data/test_output.csv'
 
+
 class TestMatcher(unittest.TestCase):
 
-    
     def test_set_scores(self):
         m_class._Matcher__set_scores()
 
@@ -52,6 +53,7 @@ class TestMatcher(unittest.TestCase):
         tmp_df1['SCORE'] = test_df1['pre_score']
         assert_frame_equal(tmp_df1[0:6], m_class.compute_matched_data())
 
+
 class TestMatch(unittest.TestCase):
 
     def test_match(self):
@@ -70,9 +72,9 @@ class TestMatch(unittest.TestCase):
             assert_frame_equal(tmp_df_csv[0:6], output_csv)
 
 
-suite = unittest.TestLoader().loadTestsFromTestCase(TestMatcher)
-_ = unittest.TextTestRunner().run(suite)
+if __name__ == "__main__":
+    suite = unittest.TestLoader().loadTestsFromTestCase(TestMatcher)
+    _ = unittest.TextTestRunner().run(suite)
 
-suite = unittest.TestLoader().loadTestsFromTestCase(TestMatch)
-_ = unittest.TextTestRunner().run(suite)
-
+    suite = unittest.TestLoader().loadTestsFromTestCase(TestMatch)
+    _ = unittest.TextTestRunner().run(suite)
