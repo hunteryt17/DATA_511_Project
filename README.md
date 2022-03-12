@@ -13,7 +13,7 @@ After cloning, navigate to the directory where the repo is located and use pip t
 `pip install .`
 
 ## Usage
-For full usage, view the examples directory to see a Jupyter Notebook where a full use case is demonstrated.
+For full usage, view the examples directory to see a Jupyter Notebook where a full use case is demonstrated.  
 Some notes about data cleaning:
 - Ensure that all data is converted to numeric values (one-hot encode categorical variables)
 - Remove or transform any NULL values in the data
