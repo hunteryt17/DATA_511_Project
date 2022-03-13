@@ -31,6 +31,19 @@ class Matcher:
         self.predictors = predictors
 
     def compute_matched_data(self):
+        """
+        Creates and returned matched dataset based on data & treatment column.
+
+        This function runs all the logic to create the matched dataset from
+        creating an optimal Logistic Regression Model to matching treatment
+        data to matching each treatment sample to a control sample.
+        ----
+        Inputs:
+        None
+        Outputs:
+        - matched_data = pandas dataframe of treatment group and matched
+                     control group
+        """
 
         print("Generating Logistic Regression Model...")
         self.__create_logistic_regression()
